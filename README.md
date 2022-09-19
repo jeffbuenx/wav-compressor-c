@@ -5,7 +5,7 @@
 ## Audios WAV
 WAV ou WAVE (Waveform Audio File Format), é um subconjunto da especificação da
 Microsoft Resource Interchange File Format (RIFF) para armazenamento de arquivos
-de áudio digital. O formato não aplica qualquer compressão a sequência de bytes e ar-
+de áudio digital. O formato não aplica qualquer compressão a sequência de bytes e ar
 mazena as gravações de áudio com diferentes taxas de amostragem e taxas de bits. Tem
 sido e é um dos formatos padrão para CDs de áudio. Os arquivos WAVE são maiores
 em tamanho do que os novos formatos, tais como MP3, que utilizam compressão com
@@ -14,7 +14,7 @@ perdas para reduzir o tamanho do arquivo, mantendo a mesma qualidade de áudio.
 ## Ondas sonoras digitalmente
 Como ondas sonoras são representadas em formato digital? Basicamente,
 imaginando ondas sonoras, a amplitude de uma onda num dado momento é convertido
-em dados binários, representados por valores numéricos, que podemos chamar de "sam-
+em dados binários, representados por valores numéricos, que podemos chamar de "sam
 ple". Logo, o conjunto destes valores, são análogos ao formato da onda.
 
 
@@ -33,13 +33,13 @@ Uma das propriedades importantes de uma TDF é a possibilidade de invertê-la. A
 da TDF diz que é possível reconstruir o áudio original a partir da representação desse
 sinal em somas de funções senoidais, ou seja, conseguimos reconstruir o sinal de áudio a
 partir da soma de senos e cossenos (representados na equação pela exponencial complexa).
-O interessante dessa técnica é que, em geral, o vetor de coeficiente (após a Transfor-
+O interessante dessa técnica é que, em geral, o vetor de coeficiente (após a Transfor
 mada) são esparsos (possuem muitos valores nulos, ou próximos de zero). Dessa forma,
 perceba que, se precisarmos transferir o áudio para outro computador, podemos, apenas,
 transferir os T coeficientes mais importantes e suas posições originais no vetor (ou seja,
 antes de ordená-lo), além, é claro, do número total de coeficientes. No outro computador,
 poderíamos recuperar essas informações, criar um vetor para conter os coeficientes mais
-importantes e aqueles menos importantes que terão valor igual a zero. Em seguida, apli-
+importantes e aqueles menos importantes que terão valor igual a zero. Em seguida, apli
 caríamos a Inversa da Transformada Discreta de Fourier e obteríamos uma aproximação
 do sinal de áudio.
 

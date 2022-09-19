@@ -1,12 +1,7 @@
 /*
  *	Jefferson E. M. Bueno
- *	Nusp: 11275255
- *
- *      Universidade de São Paulo
- *      Instituto de Ciências Matemáticas e de Computação
- *      SCC0201 — Introdução a Ciências da Computação II
- * 
- *      Trabalho 02: Compressão de áudio
+ *      
+ *      Compressão de áudios WAV
  * 
  */
 

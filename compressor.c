@@ -61,7 +61,9 @@ unsigned char *IDFT(coef_t *vet_coef, int length) {
 
     for (int n = 0; n < length; n++) {
         for (int k = 0; k < length; k++) {
-            coef[n] += vet_coef[k].q * cexp((2.0 * M_PI * (((k+1) * n * 1.0) / (length * 1.0))) * _Complex_I);
+            // coef[n] += vet_coef[k].q * cexp((2.0 * M_PI * (((k+1) * n * 1.0) / (length * 1.0))) * _Complex_I);
+            coef[n] += vet_coef[k].q * cexp(((k+1) * n * 1.0) * (2.0 * M_PI / (length * 1.0)) * _Complex_I);
+
         }
         audio[n] = (int)(coef[n] / (float)length);
     }

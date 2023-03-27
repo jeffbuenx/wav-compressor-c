@@ -11,13 +11,13 @@ sido e é um dos formatos padrão para CDs de áudio. Os arquivos WAVE são maio
 em tamanho do que os novos formatos, tais como MP3, que utilizam compressão com
 perdas para reduzir o tamanho do arquivo, mantendo a mesma qualidade de áudio.
 
-## Ondas sonoras digitalmente
+### Como ondas sonoras são representadas em formato digital?
 Como ondas sonoras são representadas em formato digital? Basicamente,
 imaginando ondas sonoras, a amplitude de uma onda num dado momento é convertido
 em dados binários, representados por valores numéricos, que podemos chamar de "sample".
 Logo, o conjunto destes valores, são análogos ao formato da onda.
 
-
+----------------------------------
 ## Transformada Discreta de Fourier
 Uma das ferramentas mais úteis na análise e processamento de sinais como áudio é
 a Transformada Discreta de Fourier. Essa transformada permite obter um coeficiente
@@ -50,6 +50,21 @@ assim, de uma Compressão de Áudio.
 
 
 ## Uso do programa
+Primeiramente, compile o programa inserindo o seguinte comando no terminal
+```
+make
+```
+Isso ira gerar um arquivo "bin", que pode ser usado da seguinte maneira:
+Execute o programa inserindo
+```
+./bin
+```
 A entrada do programa consiste em 2 valores, em linhas diferentes.
 O primeiro é o nome do áudio wav a ser comprimido
-O segundo é o número de coeficientes que devem ser utilizados na compressão
+O segundo é o número de coeficientes que devem ser utilizados na compressão.
+Por exemplo:
+```
+bubble.wav
+100
+```
+Voce pode testar o programa utilizando os wav na pasta "audios"

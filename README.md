@@ -1,70 +1,112 @@
-# wav-compressor-c
+# 🎧 WAV Compressor
 
-## FIXME: Formula da inversa ligeiramente incorreta
+**Autor:** *Jefferson E. M. Bueno*
 
-## Audios WAV
-WAV ou WAVE (Waveform Audio File Format), é um subconjunto da especificação da
-Microsoft Resource Interchange File Format (RIFF) para armazenamento de arquivos
-de áudio digital. O formato não aplica qualquer compressão a sequência de bytes e armazena
-as gravações de áudio com diferentes taxas de amostragem e taxas de bits. Tem
-sido e é um dos formatos padrão para CDs de áudio. Os arquivos WAVE são maiores
-em tamanho do que os novos formatos, tais como MP3, que utilizam compressão com
-perdas para reduzir o tamanho do arquivo, mantendo a mesma qualidade de áudio.
+### 🔗 Repositório: [WAV Compressor](https://github.com/voidashi/wav-compressor-c)
 
-### Como ondas sonoras são representadas em formato digital?
-Como ondas sonoras são representadas em formato digital? Basicamente,
-imaginando ondas sonoras, a amplitude de uma onda num dado momento é convertido
-em dados binários, representados por valores numéricos, que podemos chamar de "sample".
-Logo, o conjunto destes valores, são análogos ao formato da onda.
+---
 
-----------------------------------
-## Transformada Discreta de Fourier
-Uma das ferramentas mais úteis na análise e processamento de sinais como áudio é
-a Transformada Discreta de Fourier. Essa transformada permite obter um coeficiente
-(que é um par de valores, ou seja, um valor complexo) para cada sample (amplitude do
-diafragma do microfone) do sinal de áudio original. Como uma onda sonora pode ser
-representada por uma combinação de várias ondas senoidais, de forma grosseira, esses
-coeficientes representam a quantidade de uma determinada onda senoidal presente na
-onda original, desde aquelas de menor frequência (sons mais graves), até as de maior
-frequência (sons mais agudos).
+## 📜 Descrição
 
-## Inversa da Transformada Discreta de Fourier
-Uma das propriedades importantes de uma TDF é a possibilidade de invertê-la. A teoria
-da TDF diz que é possível reconstruir o áudio original a partir da representação desse
-sinal em somas de funções senoidais, ou seja, conseguimos reconstruir o sinal de áudio a
-partir da soma de senos e cossenos (representados na equação pela exponencial complexa).
-O interessante dessa técnica é que, em geral, o vetor de coeficiente (após a Transformada)
-são esparsos (possuem muitos valores nulos, ou próximos de zero). Dessa forma,
-perceba que, se precisarmos transferir o áudio para outro computador, podemos, apenas,
-transferir os T coeficientes mais importantes e suas posições originais no vetor (ou seja,
-antes de ordená-lo), além, é claro, do número total de coeficientes. No outro computador,
-poderíamos recuperar essas informações, criar um vetor para conter os coeficientes mais
-importantes e aqueles menos importantes que terão valor igual a zero. Em seguida, aplicaríamos
-a Inversa da Transformada Discreta de Fourier e obteríamos uma aproximação
-do sinal de áudio.
+Este projeto implementa a compressão de arquivos de áudio no formato **WAV** usando a **Transformada Discreta de Fourier (DFT)**. A compressão é realizada removendo coeficientes de frequência menos significativos, mantendo apenas os `T` mais importantes. Após a compressão, o áudio é reconstruído e salvo em um novo arquivo comprimido.
 
-## Ou seja...
-Perceba que assim, transferiríamos uma quantidade muito menor de dados para o
-computador destino e poderíamos, ainda, reconstituir o áudio e ouvi-lo. Tratando-se
-assim, de uma Compressão de Áudio.
+---
 
+## 🚀 Funcionalidades
 
-## Uso do programa
-Primeiramente, compile o programa inserindo o seguinte comando no terminal
+- 🔍 **Leitura de arquivos WAV**, ignorando o cabeçalho.
+- ⚙️ **Transformada Discreta de Fourier (DFT)** para converter o sinal do domínio do tempo para o domínio da frequência.
+- 📊 **Ordenação e compressão** dos coeficientes de Fourier, removendo os menos significativos.
+- 🎛️ **Reconstrução do sinal de áudio** comprimido usando a **Transformada Inversa de Fourier (IDFT)**.
+- 💾 **Criação de um novo arquivo WAV comprimido**.
+
+---
+
+## ⚙️ Como Usar
+
+### 1️⃣ Clone o repositório:
+
+```bash
+git clone https://github.com/voidashi/wav-compressor-c.git
 ```
-make
+
+### 2️⃣ Compile o projeto:
+
+```bash
+gcc main.c compressor.c -o wav_compressor -lm
 ```
-Isso ira gerar um arquivo "bin", que pode ser usado da seguinte maneira:
-Execute o programa inserindo
+
+### 3️⃣ Execute o programa:
+
+```bash
+./wav_compressor
 ```
-./bin
+
+O programa solicitará:
+- O **nome do arquivo WAV** a ser comprimido (exemplo: `audio.wav`).
+- O **número `T` de coeficientes** mais significativos a serem mantidos.
+
+#### Exemplo de execução:
+
 ```
-A entrada do programa consiste em 2 valores, em linhas diferentes.
-O primeiro é o nome do áudio wav a ser comprimido
-O segundo é o número de coeficientes que devem ser utilizados na compressão.
-Por exemplo:
+audio.wav
+500
 ```
-bubble.wav
-100
-```
-Voce pode testar o programa utilizando os wav na pasta "audios"
+
+O arquivo comprimido será salvo como **`audio_comp.wav`** na pasta atual.
+
+---
+
+## 🔧 Requisitos
+
+- **Compilador GCC** (para compilar o código C).
+- Biblioteca padrão `math.h` (para operações matemáticas).
+- Arquivos de áudio no formato **WAV** para compressão.
+
+---
+
+## 🔬 Explicação Técnica: Transformada de Fourier
+
+A **Transformada Discreta de Fourier (DFT)** é uma técnica matemática que transforma um sinal do domínio do tempo (uma sequência de amostras de áudio) para o domínio da frequência. Esse processo permite que se descubra quais frequências estão presentes no sinal e suas respectivas magnitudes. Para a compressão de áudio, a DFT é utilizada para identificar e ordenar as frequências mais importantes.
+
+### Etapas do Processo de Compressão:
+
+1. **Aplicação da DFT**:
+   O sinal de áudio, que originalmente está no domínio do tempo (sequência de amostras), é transformado em um conjunto de coeficientes que representam as frequências presentes no áudio. Cada coeficiente da DFT tem uma parte real e uma parte imaginária, formando um número complexo.
+
+2. **Ordenação dos Coeficientes**:
+   Os coeficientes obtidos pela DFT são ordenados de acordo com a sua magnitude (ou intensidade). As frequências mais importantes têm coeficientes de maior magnitude, enquanto as menos importantes têm coeficientes menores.
+
+3. **Remoção de Frequências**:
+   Para comprimir o áudio, apenas os `T` coeficientes com maior magnitude são preservados. Os coeficientes menos significativos (com menor magnitude) são zerados, eliminando frequências menos importantes, reduzindo o tamanho do arquivo.
+
+4. **Reconstrução com a IDFT**:
+   Após a remoção dos coeficientes desnecessários, a **Transformada Inversa de Fourier (IDFT)** é aplicada para reconstruir o sinal no domínio do tempo, gerando uma versão comprimida do áudio original.
+
+### Exemplo de Compressão
+
+- **Entrada**: Um arquivo de áudio **WAV** (ex: `audio.wav`).
+- **Transformação**: A DFT transforma o áudio no domínio da frequência. Após isso, o número `T` de coeficientes mais importantes é mantido.
+- **Saída**: Um arquivo comprimido, **audio_comp.wav**, é gerado utilizando a IDFT.
+
+---
+
+## 🎯 Exemplo de Uso
+
+1. **Entrada**: Arquivo de áudio WAV (`audio.wav`).
+2. **Compressão**: Seleção dos `T` coeficientes mais importantes.
+3. **Saída**: Arquivo comprimido chamado `audio_comp.wav`.
+
+---
+
+## 💡 Contribuições
+
+Contribuições são sempre bem-vindas! Se você encontrou um problema ou tem uma sugestão, sinta-se à vontade para abrir uma **issue** ou enviar um **pull request**.
+
+---
+
+## 📜 Licença
+
+Este projeto está licenciado sob a **MIT License**.
+
+---

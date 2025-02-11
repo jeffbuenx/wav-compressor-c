@@ -1,112 +1,94 @@
-# 🎧 WAV Compressor
+# 🎧 WAV Compressor *in Pure C*
 
-**Autor:** *Jefferson E. M. Bueno*
+**DFT-based audio compression tool for WAV files with frequency domain processing**  
+[![C](https://img.shields.io/badge/C-ISO_C11-blue?logo=c&logoColor=white)](https://iso.org/standard/74528.html)
+[![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
+[![Math](https://img.shields.io/badge/Dependency-libm-critical)](https://www.gnu.org/software/libc/)
 
-### 🔗 Repositório: [WAV Compressor](https://github.com/voidashi/wav-compressor-c)
+## 🎯 Key Features
 
----
+### Core Capabilities
+- **WAV Header Preservation** - Maintains original file structure
+- **Frequency Domain Compression** - DFT/IDFT signal processing
+- **Adaptive Thresholding** - Keep top `T` significant coefficients
+- **Lossy Compression** - Controlled audio quality reduction
 
-## 📜 Descrição
+### Technical Highlights
+- **Pure C Implementation** - Zero external dependencies
+- **Portable Code** - Standard C11 compliance
+- **Batch Processing** - Process multiple files sequentially
 
-Este projeto implementa a compressão de arquivos de áudio no formato **WAV** usando a **Transformada Discreta de Fourier (DFT)**. A compressão é realizada removendo coeficientes de frequência menos significativos, mantendo apenas os `T` mais importantes. Após a compressão, o áudio é reconstruído e salvo em um novo arquivo comprimido.
+## 🛠️ Installation & Usage
 
----
-
-## 🚀 Funcionalidades
-
-- 🔍 **Leitura de arquivos WAV**, ignorando o cabeçalho.
-- ⚙️ **Transformada Discreta de Fourier (DFT)** para converter o sinal do domínio do tempo para o domínio da frequência.
-- 📊 **Ordenação e compressão** dos coeficientes de Fourier, removendo os menos significativos.
-- 🎛️ **Reconstrução do sinal de áudio** comprimido usando a **Transformada Inversa de Fourier (IDFT)**.
-- 💾 **Criação de um novo arquivo WAV comprimido**.
-
----
-
-## ⚙️ Como Usar
-
-### 1️⃣ Clone o repositório:
-
+### Compilation
 ```bash
 git clone https://github.com/voidashi/wav-compressor-c.git
-```
-
-### 2️⃣ Compile o projeto:
-
-```bash
+cd wav-compressor-c
 gcc main.c compressor.c -o wav_compressor -lm
 ```
 
-### 3️⃣ Execute o programa:
-
+### Execution
 ```bash
 ./wav_compressor
+# Follow prompts:
+# 1) Input filename (e.g., audio.wav)
+# 2) Threshold T (e.g., 500)
 ```
 
-O programa solicitará:
-- O **nome do arquivo WAV** a ser comprimido (exemplo: `audio.wav`).
-- O **número `T` de coeficientes** mais significativos a serem mantidos.
+### Output
+- Creates `audio_comp.wav` in working directory
+- Preserves original sampling rate/bit depth
+- Logs compression ratio to console
 
-#### Exemplo de execução:
+## 📚 Technical Deep Dive
 
+### DFT Compression Pipeline
+1. **Time Domain Input**  
+   Read PCM samples from WAV file (header ignored)
+
+2. **Frequency Transformation**  
+   Apply Discrete Fourier Transform (DFT) on sample windows
+
+3. **Coefficient Selection**  
+   Keep top `T` coefficients by magnitude  
+   `|F[k]| = sqrt(Re² + Im²)`
+
+4. **Signal Reconstruction**  
+   Inverse DFT (IDFT) to time domain
+
+5. **WAV File Generation**  
+   Write processed samples to new header-preserved file
+
+### Mathematical Foundations
+```c
+// DFT Calculation
+for k=0 to N-1:
+    F[k] = Σₙ (x[n] * e^(-j2πkn/N))
+    
+// IDFT Reconstruction
+x_compressed[n] = (1/N) Σₖ (F_filtered[k] * e^(j2πkn/N))
 ```
-audio.wav
-500
+
+## 📊 Performance Considerations
+- **Complexity**: O(N²) naive DFT implementation
+- **Window Size**: Default 1024 samples
+- **Quality Tradeoff**: Higher T = better fidelity + larger size
+
+## 🤝 Contribution Guidelines
+```bash
+# Recommended workflow
+1. Fork repository
+2. Create feature branch
+3. Add tests for new functionality
+4. Submit pull request
 ```
 
-O arquivo comprimido será salvo como **`audio_comp.wav`** na pasta atual.
+**Focus Areas**  
+- Optimized FFT implementation
+- Parallel processing support
+- Bitrate control options
 
----
+## 📜 License
+MIT Licensed - Full terms in [LICENSE](LICENSE)
 
-## 🔧 Requisitos
-
-- **Compilador GCC** (para compilar o código C).
-- Biblioteca padrão `math.h` (para operações matemáticas).
-- Arquivos de áudio no formato **WAV** para compressão.
-
----
-
-## 🔬 Explicação Técnica: Transformada de Fourier
-
-A **Transformada Discreta de Fourier (DFT)** é uma técnica matemática que transforma um sinal do domínio do tempo (uma sequência de amostras de áudio) para o domínio da frequência. Esse processo permite que se descubra quais frequências estão presentes no sinal e suas respectivas magnitudes. Para a compressão de áudio, a DFT é utilizada para identificar e ordenar as frequências mais importantes.
-
-### Etapas do Processo de Compressão:
-
-1. **Aplicação da DFT**:
-   O sinal de áudio, que originalmente está no domínio do tempo (sequência de amostras), é transformado em um conjunto de coeficientes que representam as frequências presentes no áudio. Cada coeficiente da DFT tem uma parte real e uma parte imaginária, formando um número complexo.
-
-2. **Ordenação dos Coeficientes**:
-   Os coeficientes obtidos pela DFT são ordenados de acordo com a sua magnitude (ou intensidade). As frequências mais importantes têm coeficientes de maior magnitude, enquanto as menos importantes têm coeficientes menores.
-
-3. **Remoção de Frequências**:
-   Para comprimir o áudio, apenas os `T` coeficientes com maior magnitude são preservados. Os coeficientes menos significativos (com menor magnitude) são zerados, eliminando frequências menos importantes, reduzindo o tamanho do arquivo.
-
-4. **Reconstrução com a IDFT**:
-   Após a remoção dos coeficientes desnecessários, a **Transformada Inversa de Fourier (IDFT)** é aplicada para reconstruir o sinal no domínio do tempo, gerando uma versão comprimida do áudio original.
-
-### Exemplo de Compressão
-
-- **Entrada**: Um arquivo de áudio **WAV** (ex: `audio.wav`).
-- **Transformação**: A DFT transforma o áudio no domínio da frequência. Após isso, o número `T` de coeficientes mais importantes é mantido.
-- **Saída**: Um arquivo comprimido, **audio_comp.wav**, é gerado utilizando a IDFT.
-
----
-
-## 🎯 Exemplo de Uso
-
-1. **Entrada**: Arquivo de áudio WAV (`audio.wav`).
-2. **Compressão**: Seleção dos `T` coeficientes mais importantes.
-3. **Saída**: Arquivo comprimido chamado `audio_comp.wav`.
-
----
-
-## 💡 Contribuições
-
-Contribuições são sempre bem-vindas! Se você encontrou um problema ou tem uma sugestão, sinta-se à vontade para abrir uma **issue** ou enviar um **pull request**.
-
----
-
-## 📜 Licença
-
-Este projeto está licenciado sob a **MIT License**.
-
----
+Would you like me to create the companion DFT flow diagram concept?

@@ -1,92 +1,91 @@
-# 🎧 WAV Compressor *in Pure C*
+# 🎧 WAV Compressor  
 
-**DFT-based audio compression tool for WAV files with frequency domain processing**  
-[![C](https://img.shields.io/badge/C-ISO_C11-blue?logo=c&logoColor=white)](https://iso.org/standard/74528.html)
-[![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
-[![Math](https://img.shields.io/badge/Dependency-libm-critical)](https://www.gnu.org/software/libc/)
+*A DFT-based audio compression tool for WAV files, balancing file size reduction with perceptual quality.*  
 
-## 🎯 Key Features
+[![C](https://img.shields.io/badge/Language-C-informational?style=flat&logo=c&logoColor=white)](https://en.wikipedia.org/wiki/C_(programming_language))  
+[![License](https://img.shields.io/badge/License-MIT-green?style=flat)](LICENSE)  
 
-### Core Capabilities
-- **WAV Header Preservation** - Maintains original file structure
-- **Frequency Domain Compression** - DFT/IDFT signal processing
-- **Adaptive Thresholding** - Keep top `T` significant coefficients
-- **Lossy Compression** - Controlled audio quality reduction
+---
 
-### Technical Highlights
-- **Pure C Implementation** - Zero external dependencies
-- **Portable Code** - Standard C11 compliance
-- **Batch Processing** - Process multiple files sequentially
+## 📦 Features  
 
-## 🛠️ Installation & Usage
+### **Core Functionality**  
+- **WAV File Support**: Read and process standard PCM WAV files (header-aware).  
+- **Frequency Domain Compression**: Leverage Discrete Fourier Transform (DFT) to isolate significant frequencies.  
+- **Threshold-Based Filtering**: Retain only the top `T` coefficients for efficient compression.  
+- **Lossy Reconstruction**: Rebuild audio using Inverse DFT (IDFT) to generate compressed output.  
 
-### Compilation
-```bash
-git clone https://github.com/voidashi/wav-compressor-c.git
-cd wav-compressor-c
-gcc main.c compressor.c -o wav_compressor -lm
-```
+### **Key Advantages**  
+- **Mathematically Grounded**: DFT/IDFT ensures scientifically sound compression.  
+- **Adjustable Compression**: Customize the trade-off between file size and audio quality via the `T` parameter.  
+- **Lightweight**: No external dependencies beyond standard C libraries.  
 
-### Execution
-```bash
-./wav_compressor
-# Follow prompts:
-# 1) Input filename (e.g., audio.wav)
-# 2) Threshold T (e.g., 500)
-```
+---
 
-### Output
-- Creates `audio_comp.wav` in working directory
-- Preserves original sampling rate/bit depth
-- Logs compression ratio to console
+## 🚀 Getting Started  
 
-## 📚 Technical Deep Dive
+### **Clone the Repository**  
+```bash  
+git clone https://github.com/voidashi/wav-compressor-c.git  
+```  
 
-### DFT Compression Pipeline
-1. **Time Domain Input**  
-   Read PCM samples from WAV file (header ignored)
+### **Compile the Code**  
+Link the math library explicitly:  
+```bash  
+gcc main.c compressor.c -o wav_compressor -lm  
+```  
 
-2. **Frequency Transformation**  
-   Apply Discrete Fourier Transform (DFT) on sample windows
+### **Run the Compressor**  
+Execute the binary and follow prompts:  
+```bash  
+./wav_compressor  
+```  
+**Input Example:**  
+```  
+audio.wav   # Input filename  
+500         # Retain top 500 coefficients  
+```  
+**Output:** `audio_comp.wav` (compressed version).  
 
-3. **Coefficient Selection**  
-   Keep top `T` coefficients by magnitude  
-   `|F[k]| = sqrt(Re² + Im²)`
+**Note:** Test with short audio clips first to evaluate quality impact!  
 
-4. **Signal Reconstruction**  
-   Inverse DFT (IDFT) to time domain
+---
 
-5. **WAV File Generation**  
-   Write processed samples to new header-preserved file
+## 🧠 Technical Overview  
 
-### Mathematical Foundations
-```c
-// DFT Calculation
-for k=0 to N-1:
-    F[k] = Σₙ (x[n] * e^(-j2πkn/N))
-    
-// IDFT Reconstruction
-x_compressed[n] = (1/N) Σₖ (F_filtered[k] * e^(j2πkn/N))
-```
+### **How DFT Compression Works**  
+1. **Time → Frequency Domain**:  
+   DFT converts audio samples into complex frequency coefficients.  
+2. **Coefficient Ranking**:  
+   Sort coefficients by magnitude (most to least significant).  
+3. **Threshold Filtering**:  
+   Discard all but the top `T` coefficients; zero others.  
+4. **Reconstruction**:  
+   Apply IDFT to convert filtered coefficients back to time-domain samples.  
 
-## 📊 Performance Considerations
-- **Complexity**: O(N²) naive DFT implementation
-- **Window Size**: Default 1024 samples
-- **Quality Tradeoff**: Higher T = better fidelity + larger size
+### **Trade-Offs**  
+- **Higher `T`**: Better quality, larger file.  
+- **Lower `T`**: Smaller file, potential artifacts.  
 
-## 🤝 Contribution Guidelines
-```bash
-# Recommended workflow
-1. Fork repository
-2. Create feature branch
-3. Add tests for new functionality
-4. Submit pull request
-```
+---
 
-**Focus Areas**  
-- Optimized FFT implementation
-- Parallel processing support
-- Bitrate control options
+## 🛠️ Usage Tips  
+- **Ideal Use Case**: Speech/tonal audio (preserves dominant frequencies well).  
+- **Avoid**: Highly complex audio (orchestral, heavy percussion) unless using high `T`.  
+- **Verify**: Always listen to `audio_comp.wav` to assess perceptual quality.  
 
-## 📜 License
-MIT Licensed - Full terms in [LICENSE](LICENSE)
+---
+
+## 🤝 Contributing  
+Found a bug or improvement?  
+- Open an **Issue** for feature requests or problem reports.  
+- Submit a **Pull Request** for tested, well-commented fixes.  
+
+---
+
+## 📄 License  
+MIT Licensed - See [LICENSE](LICENSE) for details.  
+
+---  
+
+*Compression meets clarity—simplifying audio without losing essence.*

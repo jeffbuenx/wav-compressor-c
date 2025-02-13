@@ -90,5 +90,3 @@ x_compressed[n] = (1/N) Σₖ (F_filtered[k] * e^(j2πkn/N))
 
 ## 📜 License
 MIT Licensed - Full terms in [LICENSE](LICENSE)
-
-Would you like me to create the companion DFT flow diagram concept?
